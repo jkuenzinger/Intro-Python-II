@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -49,3 +50,41 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+#create a input parser that accepts direction commands
+#parser should print error if wrong choice is inputed
+wrongpath = "There is no path in that direction"
+
+player = Player("Ch1efW1z", room['outside'])
+
+while True:
+    print(player.startingroom)
+    playerinput = input("Choose a direction to travel north, south, east, west or q to quit: ")
+    try:
+        if(playerinput == 'q'):
+            break
+        elif(playerinput != 'north' and playerinput != 'south' and playerinput != 'east' and playerinput != 'west'):
+            print("You must select a direction or q to quit")
+            print(playerinput)
+        elif(playerinput == 'north'):
+            if(player.startingroom.n_to == 'none'):
+                print(wrongpath)
+            else:
+                player.startingroom = player.startingroom.n_to
+        elif(playerinput == 'south'):
+            if(player.startingroom.s_to == 'none'):
+                print(wrongpath)
+            else:
+                player.startingroom = player.startingroom.s_to
+        elif(playerinput == 'east'):
+            if(player.startingroom.e_to == 'none'):
+                print(wrongpath)
+            else:
+                player.startingroom = player.startingroom.e_to
+        elif(playerinput == 'west'):
+            if(player.startingroom.w_to == 'none'):
+                print(wrongpath)
+            else:
+                player.startingroom = player.startingroom.w_to
+    except ValueError:
+        print("Please enter a valid command")
