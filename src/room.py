@@ -1,16 +1,17 @@
-# Implement a class to hold room information. This should have name and
-# description attributes.
 class Room:
-    def __init__(self, name, description):
+    def __init__(self, name, description, items=None):
         self.name = name
         self.description = description
-        self.n_to = 'none'
-        self.s_to = 'none'
-        self.w_to = 'none'
-        self.e_to = 'none'
+        self.items = []
+
+    def add_item(self, item):
+        self.items.append(item)
+        return self.items
+
+    def remove_item(self, item):
+        del self.items[item]
+
     def __str__(self):
-        output = f"{self.name}: {self.description}"
-        return output
-    def __repr__(self):
-        output = f"self.name = {self.name} ; self.description = {self.description} ; self.n_to = {self.n_to} ;  self.s_to = {self.s_to} ;  self.w_to = {self.w_to} ;  self.e_to = {self.e_to}"
-        return output
+        if items is not None:
+            return f''
+        return f'{self.name}: {self.description}'

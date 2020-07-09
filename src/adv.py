@@ -1,11 +1,12 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "The cave mount to the north is a dark hole calling for you to enter"),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -25,14 +26,16 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['outside'].n_to = 'foyer'
+room['foyer'].s_to = 'outside'
+room['foyer'].n_to = 'overlook'
+room['foyer'].e_to = 'narrow'
+room['overlook'].s_to = 'foyer'
+room['narrow'].w_to = 'foyer'
+room['narrow'].n_to = 'treasure'
+room['treasure'].s_to = 'narrow'
+
+
 
 #
 # Main
@@ -53,38 +56,45 @@ room['treasure'].s_to = room['narrow']
 
 #create a input parser that accepts direction commands
 #parser should print error if wrong choice is inputed
-wrongpath = "There is no path in that direction"
+player = Player('You', 'outside')
 
-player = Player("Ch1efW1z", room['outside'])
+userChoice = ['north', 'south', 'east', 'west', 'quit']
+choice = 0
 
-while True:
-    print(player.startingroom)
-    playerinput = input("Choose a direction to travel north, south, east, west or q to quit: ")
+Rustysword = Item('Rusty sword', 'This sword may help you survive the perils that lie ahead')
+room['foyer'].add_item(Rustysword)
+
+print(f'\n  You are standing before an  {room[player.location].name}  {room[player.location].description}')
+
+while choice != 'quit':
+    choice = input('\nChoose a direction: ')
     try:
-        if(playerinput == 'q'):
-            break
-        elif(playerinput != 'north' and playerinput != 'south' and playerinput != 'east' and playerinput != 'west'):
-            print("You must select a direction or q to quit")
-            print(playerinput)
-        elif(playerinput == 'north'):
-            if(player.startingroom.n_to == 'none'):
-                print(wrongpath)
-            else:
-                player.startingroom = player.startingroom.n_to
-        elif(playerinput == 'south'):
-            if(player.startingroom.s_to == 'none'):
-                print(wrongpath)
-            else:
-                player.startingroom = player.startingroom.s_to
-        elif(playerinput == 'east'):
-            if(player.startingroom.e_to == 'none'):
-                print(wrongpath)
-            else:
-                player.startingroom = player.startingroom.e_to
-        elif(playerinput == 'west'):
-            if(player.startingroom.w_to == 'none'):
-                print(wrongpath)
-            else:
-                player.startingroom = player.startingroom.w_to
-    except ValueError:
-        print("Please enter a valid command")
+        if choice == 'north':
+            player.location = room[player.location].n_to
+            print(f'\n  You walk through the dark mouth of the cave into a strange {room[player.location].name} \n\n  {room[player.location].description}')
+            if len(room[player.location].items) != 0:
+                print(f'\n  You see a {room[player.location].items[0]}')
+
+        if choice == 'south':
+            player.location = room[player.location].s_to
+            print(f'\n  You walk south into the {room[player.location].name} \n\n  {room[player.location].description}')
+            if len(room[player.location].items) != 0:
+                print(f'\n  You see a {room[player.location].items[0]}')
+
+        if choice == 'east':
+            player.location = room[player.location].e_to
+            print(f'\n  You walk east into the {room[player.location].name} \n\n   {room[player.location].description}')
+            if len(room[player.location].items) != 0:
+                print(f'\n  You see a {room[player.location].items[0]}')
+
+        if choice == 'west':
+            player.location = room[player.location].w_to
+            print(f'\n  You walk west into the {room[player.location].name} \n\n   {room[player.location].description}')
+            if len(room[player.location].items) != 0:
+                print(f'\n  You see a {room[player.location].items[0]}')
+
+        if choice not in userChoice:
+            print('\n   That is not a direction.  Type c to see the controls')
+
+    except:
+        print("\n   You can't go that way")
